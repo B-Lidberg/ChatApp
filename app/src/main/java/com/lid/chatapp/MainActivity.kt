@@ -10,6 +10,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ExitToApp
 import androidx.compose.runtime.*
@@ -22,6 +24,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import com.lid.chatapp.data.ChatMessage
 import com.lid.chatapp.presentation.ChatViewModel
+import com.lid.chatapp.presentation.MessageCard
 import com.lid.chatapp.ui.theme.ChatAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import io.socket.client.Socket
@@ -29,6 +32,7 @@ import io.socket.client.IO
 import io.socket.emitter.Emitter
 import kotlinx.coroutines.*
 import java.net.URISyntaxException
+import javax.inject.Inject
 
 const val TAG = "TAG"
 val gson: Gson = Gson()
@@ -37,7 +41,6 @@ val gson: Gson = Gson()
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mSocket: Socket
-    private lateinit var username: String
 
     private val viewModel: ChatViewModel by viewModels()
 
@@ -46,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         try {
-            mSocket = IO.socket("http://10.0.2.2:4444")
+            mSocket = IO.socket("ws://10.0.2.2:4444")
             Log.d(TAG, "Success - ${mSocket.id()}")
 
         } catch (e: URISyntaxException) {
@@ -56,6 +59,7 @@ class MainActivity : AppCompatActivity() {
         mSocket.on("disconnect", onConnectionError)
         mSocket.on("chat message", onMessage)
         mSocket.connect()
+
 
         setContent {
             ChatAppTheme {
@@ -81,15 +85,19 @@ class MainActivity : AppCompatActivity() {
             Log.e(TAG, "connection error")
     }
     private val onMessage = Emitter.Listener {
-        val message: String = it.toString()
-        Log.d(TAG,"onMessage called")
-        viewModel.sendMessage(message)
-        viewModel.allMessages.value
+        GlobalScope.launch(Dispatchers.IO) {
+            val message: ChatMessage = gson.fromJson(it[0].toString(), ChatMessage::class.java)
+            Log.d(TAG, "onMessage called for $message")
+            viewModel.addMessage(ChatMessage(content = message.content))
+        }
     }
 
     fun sendMessage(message: String) {
-        mSocket.emit("chat message", message)
-        viewModel.sendMessage(message)
+        if (message.isNullOrEmpty()) return
+        val sendData = ChatMessage(content = message)
+        val jsonData = gson.toJson(sendData)
+        mSocket.emit("chat message", jsonData)
+        viewModel.clearCurrentMessage()
     }
 }
 
@@ -104,11 +112,9 @@ val fakeChat = listOf(
 fun ChatApp(vm: ChatViewModel, sendMessage: (String) -> Unit) {
 
     val currentMessage by vm.messageText.observeAsState("")
-    val messageList by vm.allMessages.observeAsState(vm.allMessages.value ?: mutableListOf())
+    val messageList by vm.allMessages.observeAsState()
 
-    LaunchedEffect(messageList.size) {
-        vm.emitSharedMessages()
-    }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -119,22 +125,15 @@ fun ChatApp(vm: ChatViewModel, sendMessage: (String) -> Unit) {
                     title = {
                         Text("Chat App")
                     },
-                    navigationIcon = {
-                        IconButton(onClick = { /*TODO*/ }) {
-                            Icon(
-                                imageVector = Icons.Rounded.ArrowBack,
-                                contentDescription = null
-                            )
-                        }
-                    },
                     actions = {
                         IconButton(
                             onClick = {
                                 Firebase.auth.signOut()
+                                vm.clearChatHistory()
                             }
                         ) {
                             Icon(
-                                imageVector = Icons.Rounded.ExitToApp,
+                                imageVector = Icons.Default.Clear,
                                 contentDescription = null
                             )
                         }
@@ -153,17 +152,7 @@ fun ChatApp(vm: ChatViewModel, sendMessage: (String) -> Unit) {
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Bottom
         ) {
-
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(.75f),
-                reverseLayout = true
-            ) {
-                items(items = messageList) { message ->
-                    Text(text = message, modifier = Modifier.padding(horizontal = 8.dp))
-                }
-            }
+            ChatBox(messageList ?: emptyList())
             OutlinedTextField(
                 value = currentMessage,
                 onValueChange = { vm.onMessageTextChange(it) },
@@ -182,5 +171,22 @@ fun PostMessageButton(sendMessage: () -> Unit) {
         },
     ) {
         Text("Send")
+    }
+}
+
+@Composable
+fun ChatBox(messages: List<ChatMessage>) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(.75f),
+        reverseLayout = true
+    ) {
+        items(items = messages.reversed()) { message ->
+            MessageCard(
+                message = message.content,
+                modifier = Modifier.padding(horizontal = 8.dp)
+            )
+        }
     }
 }

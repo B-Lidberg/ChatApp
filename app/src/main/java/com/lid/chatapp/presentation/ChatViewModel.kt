@@ -1,36 +1,22 @@
 package com.lid.chatapp.presentation
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.lid.chatapp.data.ChatMessage
+import com.lid.chatapp.data.ChatRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ChatViewModel @Inject constructor(
+    private val repo: ChatRepo
 ) : ViewModel() {
 
-    private val _sharedMessages = MutableSharedFlow<String>() // 1
-    val sharedMessages = _sharedMessages.asSharedFlow() // 2
-
-    fun emitSharedMessages() {
-        viewModelScope.launch {
-            for (message in allMessages.value ?: emptyList()) {
-                _sharedMessages.emit(message)
-            }
-        }
-    }
-
-    private val _allMessages: MutableLiveData<MutableList<String>> = MutableLiveData()
-    val allMessages: LiveData<MutableList<String>> = _allMessages
-
-    private val _message: MutableLiveData<ChatMessage> = MutableLiveData()
-    val message: LiveData<ChatMessage> = _message
+    private val _allMessages = repo.getAllMessages().asLiveData()
+    val allMessages: LiveData<List<ChatMessage>> = _allMessages
 
     private val _messageText: MutableLiveData<String> = MutableLiveData()
     val messageText: LiveData<String> = _messageText
@@ -40,12 +26,20 @@ class ChatViewModel @Inject constructor(
         _messageText.postValue(text)
     }
 
-    fun sendMessage(message: String) {
-       viewModelScope.launch {
-           _allMessages.value?.add(message)
-           _messageText.value = ""
-           _message.value = null
-       }
+    fun clearCurrentMessage() {
+       _messageText.value = ""
+    }
+
+    fun addMessage(message: ChatMessage) {
+        viewModelScope.launch {
+            repo.insertMessage(message)
+        }
+    }
+
+    fun clearChatHistory() {
+        GlobalScope.launch(IO) {
+            repo.clearMessages()
+        }
     }
 
 }
