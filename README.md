@@ -10,6 +10,6 @@
 ---
 ### Technologies:
 * #### Language: Kotlin
-* #### Server Framework: Ktor
+* #### ~~Server Framework: Ktor~~ node.js server
 * #### Android UI: Jetpack Compose
 * #### Others: Coroutines

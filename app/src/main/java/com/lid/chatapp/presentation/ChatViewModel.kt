@@ -4,10 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.ktx.Firebase
+import com.lid.chatapp.data.ChatMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,23 +13,26 @@ import javax.inject.Inject
 class ChatViewModel @Inject constructor(
 ) : ViewModel() {
 
-    private val _allMessages: MutableLiveData<MutableList<String>> = MutableLiveData()
-    val allMessages: LiveData<MutableList<String>> = _allMessages
+    private val _allMessages: MutableLiveData<MutableList<ChatMessage>> = MutableLiveData()
+    val allMessages: LiveData<MutableList<ChatMessage>> = _allMessages
 
-    private val _message: MutableLiveData<String> = MutableLiveData()
-    val message: LiveData<String> = _message
+    private val _message: MutableLiveData<ChatMessage> = MutableLiveData()
+    val message: LiveData<ChatMessage> = _message
+
+    private val _messageText: MutableLiveData<String> = MutableLiveData()
+    val messageText: LiveData<String> = _messageText
 
 
-    fun onMessageChange(text: String) {
-        _message.postValue(text)
+    fun onMessageTextChange(text: String) {
+        _messageText.postValue(text)
     }
 
-    fun sendMessage(message: String) {
+    fun sendMessage(message: ChatMessage) {
        viewModelScope.launch {
            _allMessages.value?.add(message)
-           _message.value = ""
+           _messageText.value = ""
+           _message.value = null
        }
     }
-
 
 }

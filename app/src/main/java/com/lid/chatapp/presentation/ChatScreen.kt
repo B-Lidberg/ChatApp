@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ExitToApp
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -16,24 +17,25 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.lid.chatapp.data.ChatMessage
 import com.lid.chatapp.presentation.ChatViewModel
 
 
 @Composable
 fun ChatScreen(vm: ChatViewModel = viewModel(), signOut: () -> Unit) {
 
-    val currentMessage = vm.message.observeAsState("")
-    val allMessages = vm.allMessages.observeAsState(emptyList())
+    val currentMessage by vm.messageText.observeAsState("")
+    val allMessages by vm.allMessages.observeAsState(emptyList())
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            Column(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.Center) {
                 TopAppBar(
                     backgroundColor = Color.White,
                     elevation = 1.dp,
                     title = {
-                        Text(Firebase.auth.currentUser?.email ?: "")
+                        Text("Chat App")
                     },
                     navigationIcon = {
                         IconButton(onClick = { /*TODO*/ }) {
@@ -60,8 +62,8 @@ fun ChatScreen(vm: ChatViewModel = viewModel(), signOut: () -> Unit) {
             }
         },
         floatingActionButton = {
-            PostMessageButton(currentMessage.value) {
-                vm.sendMessage(currentMessage.value)
+            PostMessageButton(currentMessage) {
+                vm.sendMessage(ChatMessage(currentMessage))
             }
         }
     ) {
@@ -70,13 +72,13 @@ fun ChatScreen(vm: ChatViewModel = viewModel(), signOut: () -> Unit) {
             verticalArrangement = Arrangement.Bottom
         ) {
             LazyColumn() {
-                items(items = allMessages.value) { message ->
-                    Text(message)
+                items(items = allMessages) { message ->
+                    Text(message.content)
                 }
             }
             OutlinedTextField(
-                value = currentMessage.value,
-                onValueChange = { vm.onMessageChange(it) },
+                value = currentMessage,
+                onValueChange = { vm.onMessageTextChange(it) },
                 modifier = Modifier.padding(16.dp)
             )
         }
