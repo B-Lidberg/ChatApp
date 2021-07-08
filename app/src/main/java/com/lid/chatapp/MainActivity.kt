@@ -2,7 +2,6 @@ package com.lid.chatapp
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -19,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.crashlytics.internal.model.CrashlyticsReport
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import com.lid.chatapp.data.ChatMessage
@@ -30,7 +28,6 @@ import io.socket.client.Socket
 import io.socket.client.IO
 import io.socket.emitter.Emitter
 import kotlinx.coroutines.*
-import org.json.JSONObject
 import java.net.URISyntaxException
 
 const val TAG = "TAG"
@@ -49,22 +46,22 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         try {
-            mSocket = IO.socket("http://localhost:4444")
-            Log.d(TAG, "Success - connected")
+            mSocket = IO.socket("http://10.0.2.2:4444")
+            Log.d(TAG, "Success - ${mSocket.id()}")
 
         } catch (e: URISyntaxException) {
             Log.e(TAG, "error: ${e.localizedMessage}")
         }
-        mSocket.connect()
         mSocket.on(Socket.EVENT_CONNECT, onConnect)
-        mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectionError)
-        mSocket.on("newMessage", onMessage)
+        mSocket.on("disconnect", onConnectionError)
+        mSocket.on("chat message", onMessage)
+        mSocket.connect()
 
         setContent {
             ChatAppTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    ChatApp(viewModel)
+                    ChatApp(viewModel) { sendMessage(it) }
                 }
             }
         }
@@ -72,43 +69,46 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        mSocket.close()
         Log.d(TAG, "WebSocket Connection closed")
     }
-}
 
-@DelicateCoroutinesApi
-val onConnect = Emitter.Listener {
-    GlobalScope.launch(Dispatchers.IO) {
-        Log.e(TAG, "connected")
+    private val onConnect = Emitter.Listener {
+            Log.e(TAG, "connected")
+        mSocket.emit("subscribe", it)
     }
-}
-@DelicateCoroutinesApi
-val onConnectionError = Emitter.Listener {
-    GlobalScope.launch(Dispatchers.IO) {
-        Log.e(TAG, "connection error")
+    private val onConnectionError = Emitter.Listener {
+            Log.e(TAG, "connection error")
+    }
+    private val onMessage = Emitter.Listener {
+        val message: String = it.toString()
+        Log.d(TAG,"onMessage called")
+        viewModel.sendMessage(message)
+        viewModel.allMessages.value
+    }
 
-    }
-}
-@DelicateCoroutinesApi
-val onMessage = Emitter.Listener { args ->
-    val obj = JSONObject(args[0].toString())
-    GlobalScope.launch(Dispatchers.IO) {
-        Log.e(TAG,"${obj.get("name")}: ${obj.get("message")}")
+    fun sendMessage(message: String) {
+        mSocket.emit("chat message", message)
+        viewModel.sendMessage(message)
     }
 }
 
-val fakeChat = listOf<ChatMessage>(
-    ChatMessage("first"),
-    ChatMessage("second"),
-    ChatMessage("third"),
+
+val fakeChat = listOf(
+    ("first"),
+    ("second"),
+    ("third"),
 )
 
 @Composable
-fun ChatApp(vm: ChatViewModel) {
+fun ChatApp(vm: ChatViewModel, sendMessage: (String) -> Unit) {
 
     val currentMessage by vm.messageText.observeAsState("")
     val messageList by vm.allMessages.observeAsState(vm.allMessages.value ?: mutableListOf())
 
+    LaunchedEffect(messageList.size) {
+        vm.emitSharedMessages()
+    }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -145,7 +145,7 @@ fun ChatApp(vm: ChatViewModel) {
         floatingActionButton = {
             PostMessageButton() {
                 Log.d(TAG, "current message: $currentMessage, message list: $messageList")
-                vm.sendMessage(ChatMessage(currentMessage))
+                sendMessage(currentMessage)
             }
         }
     ) {
@@ -153,18 +153,15 @@ fun ChatApp(vm: ChatViewModel) {
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Bottom
         ) {
-            LazyColumn(modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(.75f)) {
-                items(items = messageList) { message ->
-                    Column() {
-                        Row(Modifier.fillMaxWidth()) {
-                            Text(text = message.user ?: "", modifier = Modifier.padding(horizontal = 8.dp))
-                            Text(text = message.content, modifier = Modifier.padding(horizontal = 8.dp))
-                        }
-                        Text(text = message.timeStamp.toString(), modifier = Modifier.padding(horizontal = 8.dp))
 
-                    }
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(.75f),
+                reverseLayout = true
+            ) {
+                items(items = messageList) { message ->
+                    Text(text = message, modifier = Modifier.padding(horizontal = 8.dp))
                 }
             }
             OutlinedTextField(

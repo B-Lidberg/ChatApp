@@ -63,7 +63,7 @@ fun ChatScreen(vm: ChatViewModel = viewModel(), signOut: () -> Unit) {
         },
         floatingActionButton = {
             PostMessageButton(currentMessage) {
-                vm.sendMessage(ChatMessage(currentMessage))
+                vm.sendMessage(currentMessage)
             }
         }
     ) {
@@ -73,7 +73,7 @@ fun ChatScreen(vm: ChatViewModel = viewModel(), signOut: () -> Unit) {
         ) {
             LazyColumn() {
                 items(items = allMessages) { message ->
-                    Text(message.content)
+                    Text(message)
                 }
             }
             OutlinedTextField(
