@@ -77,11 +77,11 @@ dependencies {
 
 
     // Ktor
-    implementation "io.ktor:ktor-client-android:$ktor_version"
-    implementation "io.ktor:ktor-client-cio:$ktor_version"
-    implementation "io.ktor:ktor-client-serialization:$ktor_version"
-    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1"
-    implementation "io.ktor:ktor-client-logging-jvm:$ktor_version"
+//    implementation "io.ktor:ktor-client-android:$ktor_version"
+//    implementation "io.ktor:ktor-client-cio:$ktor_version"
+//    implementation "io.ktor:ktor-client-serialization:$ktor_version"
+//    implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1"
+//    implementation "io.ktor:ktor-client-logging-jvm:$ktor_version"
 
     // Others?
 
@@ -118,12 +118,6 @@ dependencies {
     implementation ("io.socket:socket.io-client:2.0.1") {
         exclude group: 'org.json', module: 'json'
     }
-    def scarletVersion = '0.1.10'
-    implementation "com.tinder.scarlet:scarlet:$scarletVersion"
-    implementation "com.tinder.scarlet:websocket-okhttp:$scarletVersion"
-    implementation "com.tinder.scarlet:lifecycle-android:$scarletVersion"
-    implementation "com.tinder.scarlet:stream-adapter-rxjava2:$scarletVersion"
-    implementation "com.tinder.scarlet:message-adapter-moshi:$scarletVersion"
 
 
 }

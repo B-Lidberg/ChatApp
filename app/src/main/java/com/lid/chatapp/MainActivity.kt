@@ -2,6 +2,7 @@ package com.lid.chatapp
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -18,21 +19,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.crashlytics.internal.model.CrashlyticsReport
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import com.lid.chatapp.data.ChatMessage
 import com.lid.chatapp.presentation.ChatViewModel
 import com.lid.chatapp.ui.theme.ChatAppTheme
 import dagger.hilt.android.AndroidEntryPoint
-import io.ktor.client.*
-import io.ktor.client.engine.android.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.logging.*
-import io.ktor.client.features.websocket.*
-import io.ktor.http.*
-import io.ktor.http.cio.websocket.*
+import io.socket.client.Socket
+import io.socket.client.IO
+import io.socket.emitter.Emitter
 import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.IO
+import org.json.JSONObject
+import java.net.URISyntaxException
 
 const val TAG = "TAG"
 val gson: Gson = Gson()
@@ -40,7 +39,7 @@ val gson: Gson = Gson()
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var ktorClient: HttpClient
+    private lateinit var mSocket: Socket
     private lateinit var username: String
 
     private val viewModel: ChatViewModel by viewModels()
@@ -49,29 +48,17 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        GlobalScope.launch(IO) {
-            ktorClient = HttpClient(Android) {
-                install(JsonFeature)
-                install(Logging)
-                install(WebSockets) {
-                    Log.d(TAG, "WebSocket Connection opened")
+        try {
+            mSocket = IO.socket("http://localhost:4444")
+            Log.d(TAG, "Success - connected")
 
-                }
-            }
-            ktorClient.ws(
-                method = HttpMethod.Get,
-                host = "localhost",
-                port = 4444,
-                path = "/"
-            ) {
-                send(Frame.Text("Hello, Text Frame"))
-                val messageOutputRoutine = launch { outputMessages(viewModel.allMessages.value) }
-                val userInputRoutine = launch { inputMessages(viewModel.message.value) }
-
-                userInputRoutine.join()
-                messageOutputRoutine.cancelAndJoin()
-            }
+        } catch (e: URISyntaxException) {
+            Log.e(TAG, "error: ${e.localizedMessage}")
         }
+        mSocket.connect()
+        mSocket.on(Socket.EVENT_CONNECT, onConnect)
+        mSocket.on(Socket.EVENT_CONNECT_ERROR, onConnectionError)
+        mSocket.on("newMessage", onMessage)
 
         setContent {
             ChatAppTheme {
@@ -85,8 +72,28 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        ktorClient.close()
         Log.d(TAG, "WebSocket Connection closed")
+    }
+}
+
+@DelicateCoroutinesApi
+val onConnect = Emitter.Listener {
+    GlobalScope.launch(Dispatchers.IO) {
+        Log.e(TAG, "connected")
+    }
+}
+@DelicateCoroutinesApi
+val onConnectionError = Emitter.Listener {
+    GlobalScope.launch(Dispatchers.IO) {
+        Log.e(TAG, "connection error")
+
+    }
+}
+@DelicateCoroutinesApi
+val onMessage = Emitter.Listener { args ->
+    val obj = JSONObject(args[0].toString())
+    GlobalScope.launch(Dispatchers.IO) {
+        Log.e(TAG,"${obj.get("name")}: ${obj.get("message")}")
     }
 }
 
@@ -178,33 +185,5 @@ fun PostMessageButton(sendMessage: () -> Unit) {
         },
     ) {
         Text("Send")
-    }
-}
-
-suspend fun DefaultClientWebSocketSession.outputMessages(value: MutableList<ChatMessage>?) {
-    try {
-        for (message in incoming) {
-            message as? Frame.Text ?: continue
-            val receivedText = message.readText()
-            Log.d(TAG, "output: $receivedText")
-
-        }
-    } catch (e: Exception) {
-        Log.e(TAG,"Error while receiving")
-    }
-}
-
-suspend fun DefaultClientWebSocketSession.inputMessages(value: ChatMessage?) {
-    while (true) {
-        val message = readLine() ?: ""
-        if (message.equals("exit", true)) return
-        try {
-            send(message)
-            Log.d(TAG, "Input: $message")
-
-        } catch (e: java.lang.Exception) {
-            Log.e(TAG,"Error while sending")
-            return
-        }
     }
 }
