@@ -1,15 +1,18 @@
-## Android App for Chat App
+# ChatApp
+**News App with realtime chats built with Jetpack Compose** 
 
 ---
 ### Goals:
-* Improve server-side knowledge utilizing websockets
-* Improve knowledge on Coroutines
-* Utilize Kotlin Libraries to prepare for future KMM Project(s)
-* Learn how to implement websockets inside of an Android App
+* Improve knowledge on Coroutines by implementing numerous server/db calls asynchronously
+* Practice UI/UX through Material Design
+* Improve server-side knowledge utilizing websockets and RESTful services
+* Learn how to implement and practice with websockets/REST calls inside of an Android App
 
 ---
 ### Technologies:
 * #### Language: Kotlin
-* #### ~~Server Framework: Ktor~~ node.js server
+* #### Server: node.js server
+* #### Architecture: MVVM
+* #### APIs: NewsAPI
 * #### Android UI: Jetpack Compose
-* #### Others: Coroutines
+* #### Others: Coroutines, Retrofit, Hilt, Room, FirebaseAuth, Socket.IO, Accompanist/Coil, Datastore)
