@@ -81,9 +81,9 @@ dependencies {
     // Others?
 
     // Hilt
-    def hiltCoreVersion = "2.35.1"
+    def hiltCoreVersion = "2.37"
     def hiltVersion = "1.0.0-beta01"
-    def hiltComposeNavigation = "1.0.0-alpha02"
+    def hiltComposeNavigation = "1.0.0-alpha03"
     implementation "com.google.dagger:hilt-android:$hiltCoreVersion"
     implementation "androidx.hilt:hilt-navigation-compose:$hiltComposeNavigation"
     kapt "com.google.dagger:hilt-compiler:$hiltCoreVersion"
@@ -133,8 +133,13 @@ dependencies {
     // Paging
     implementation "androidx.paging:paging-compose:1.0.0-alpha11"
 
-    // Accompanist: Coil
-    implementation "com.google.accompanist:accompanist-coil:0.13.0"
+    // Accompanist: Coil , Insets
+    def accompanist_version = '0.13.0'
+    implementation "com.google.accompanist:accompanist-coil:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-insets:$accompanist_version"
+    implementation "com.google.accompanist:accompanist-insets-ui:$accompanist_version"
+
+
 
 
 

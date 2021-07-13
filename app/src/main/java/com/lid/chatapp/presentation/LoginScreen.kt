@@ -18,7 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -31,17 +31,12 @@ import com.lid.chatapp.presentation.viewmodels.LoginViewModel
 
 
 @Composable
-fun LoginScreen(viewModel: LoginViewModel = viewModel(), signIn: () -> Unit) {
+fun LoginScreen(viewModel: LoginViewModel = hiltViewModel(), signIn: () -> Unit) {
 
     var userEmail by remember { mutableStateOf("") }
     var userPassword by remember { mutableStateOf("") }
 
-    val snackbarHostState = remember { SnackbarHostState() }
     val state by viewModel.loadingState.collectAsState()
-
-    if (Firebase.auth.currentUser != null) {
-
-    }
 
     val launcher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
@@ -55,40 +50,6 @@ fun LoginScreen(viewModel: LoginViewModel = viewModel(), signIn: () -> Unit) {
                 Log.w("TAG", "Google sign in failed", e)
             }
         }
-
-    Scaffold(
-        scaffoldState = rememberScaffoldState(snackbarHostState = snackbarHostState),
-        topBar = {
-            Column(modifier = Modifier.fillMaxWidth()) {
-                TopAppBar(
-                    backgroundColor = Color.White,
-                    elevation = 1.dp,
-                    title = {
-                        Text("Login")
-                    },
-                    navigationIcon = {
-                        IconButton(onClick = { /*TODO*/ }) {
-                            Icon(
-                                imageVector = Icons.Rounded.ArrowBack,
-                                contentDescription = null
-                            )
-                        }
-                    },
-                    actions = {
-                        IconButton(onClick = { Firebase.auth.signOut() }) {
-                            Icon(
-                                imageVector = Icons.Rounded.ExitToApp,
-                                contentDescription = null
-                            )
-                        }
-                    }
-                )
-                if (state.status == LoadingState.Status.RUNNING) {
-                    LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-                }
-            }
-        },
-    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -124,18 +85,11 @@ fun LoginScreen(viewModel: LoginViewModel = viewModel(), signIn: () -> Unit) {
 
             }
             Spacer(modifier = Modifier.height(18.dp))
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.caption,
-                text = "Login with"
-            )
-
             val context = LocalContext.current
             val token = stringResource(R.string.default_web_client_id)
 
             OutlinedButton(
-                border = ButtonDefaults.outlinedBorder.copy(width = 1.dp),
+                border = ButtonDefaults.outlinedBorder.copy(width = 2.dp),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp),
@@ -182,4 +136,3 @@ fun LoginScreen(viewModel: LoginViewModel = viewModel(), signIn: () -> Unit) {
             }
         }
     }
-}

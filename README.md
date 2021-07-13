@@ -1,5 +1,5 @@
 # ChatApp
-**News App with realtime chats built with Jetpack Compose** 
+**News App with realtime chats built using Jetpack Compose** 
 
 ---
 ### Goals:
