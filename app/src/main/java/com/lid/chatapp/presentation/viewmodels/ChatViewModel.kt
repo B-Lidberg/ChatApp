@@ -1,9 +1,8 @@
-package com.lid.chatapp.presentation
+package com.lid.chatapp.presentation.viewmodels
 
 import androidx.lifecycle.*
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.lid.chatapp.data.ChatMessage
-import com.lid.chatapp.data.ChatRepo
+import com.lid.chatapp.data.model.ChatMessage
+import com.lid.chatapp.data.repositories.ChatRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.GlobalScope

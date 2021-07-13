@@ -1,10 +1,9 @@
 package com.lid.chatapp.data.local
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
-import com.lid.chatapp.data.ChatMessage
+import com.lid.chatapp.data.model.ChatMessage
 import kotlinx.coroutines.flow.Flow
 
 @Dao

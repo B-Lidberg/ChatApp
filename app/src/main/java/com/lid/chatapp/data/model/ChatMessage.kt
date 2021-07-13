@@ -1,4 +1,4 @@
-package com.lid.chatapp.data
+package com.lid.chatapp.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

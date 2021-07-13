@@ -11,9 +11,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.rounded.ArrowBack
-import androidx.compose.material.icons.rounded.ExitToApp
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -22,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
-import com.lid.chatapp.data.ChatMessage
-import com.lid.chatapp.presentation.ChatViewModel
+import com.lid.chatapp.data.model.ChatMessage
+import com.lid.chatapp.presentation.viewmodels.ChatViewModel
 import com.lid.chatapp.presentation.MessageCard
 import com.lid.chatapp.ui.theme.ChatAppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -32,7 +29,6 @@ import io.socket.client.IO
 import io.socket.emitter.Emitter
 import kotlinx.coroutines.*
 import java.net.URISyntaxException
-import javax.inject.Inject
 
 const val TAG = "TAG"
 val gson: Gson = Gson()
@@ -110,7 +106,6 @@ val fakeChat = listOf(
 
 @Composable
 fun ChatApp(vm: ChatViewModel, sendMessage: (String) -> Unit) {
-
     val currentMessage by vm.messageText.observeAsState("")
     val messageList by vm.allMessages.observeAsState()
 

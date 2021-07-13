@@ -1,6 +1,7 @@
-package com.lid.chatapp.data
+package com.lid.chatapp.data.repositories
 
 import com.lid.chatapp.data.local.ChatDao
+import com.lid.chatapp.data.model.ChatMessage
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
