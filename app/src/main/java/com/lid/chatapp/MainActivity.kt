@@ -22,7 +22,10 @@ import com.google.gson.Gson
 import com.lid.chatapp.data.model.ChatMessage
 import com.lid.chatapp.presentation.viewmodels.ChatViewModel
 import com.lid.chatapp.presentation.MessageCard
+import com.lid.chatapp.presentation.NewsScreen
+import com.lid.chatapp.presentation.viewmodels.NewsViewModel
 import com.lid.chatapp.ui.theme.ChatAppTheme
+import com.lid.chatapp.util.Constants.TAG
 import dagger.hilt.android.AndroidEntryPoint
 import io.socket.client.Socket
 import io.socket.client.IO
@@ -30,7 +33,6 @@ import io.socket.emitter.Emitter
 import kotlinx.coroutines.*
 import java.net.URISyntaxException
 
-const val TAG = "TAG"
 val gson: Gson = Gson()
 
 @AndroidEntryPoint
@@ -39,6 +41,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var mSocket: Socket
 
     private val viewModel: ChatViewModel by viewModels()
+    private val newsViewModel: NewsViewModel by viewModels()
 
     @DelicateCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,7 +64,8 @@ class MainActivity : AppCompatActivity() {
             ChatAppTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    ChatApp(viewModel) { sendMessage(it) }
+                    NewsScreen(newsViewModel)
+//                    ChatApp(viewModel) { sendMessage(it) }
                 }
             }
         }
