@@ -6,6 +6,9 @@ import com.lid.chatapp.data.model.ChatMessage
 import com.lid.chatapp.data.repositories.ChatRepo
 import com.lid.chatapp.gson
 import com.lid.chatapp.util.Constants
+import com.lid.chatapp.util.Constants.PORT
+import com.lid.chatapp.util.Constants.WEBSOCKET_LOCALHOST
+import com.lid.chatapp.util.Constants.WEBSOCKET_PHONE_IP
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
@@ -48,12 +51,15 @@ class ChatViewModel @Inject constructor(
 
     init {
         try {
-            mSocket = io.socket.client.IO.socket("ws://10.0.2.2:4444")
-            Log.d(Constants.TAG, "Success - ${mSocket.id()}")
+            mSocket = io.socket.client.IO.socket(WEBSOCKET_LOCALHOST + PORT)
+            mSocket = io.socket.client.IO.socket(WEBSOCKET_PHONE_IP + PORT)
+
+            Log.d(Constants.TAG, "Success on emulator - ${mSocket.id()}")
 
         } catch (e: URISyntaxException) {
             Log.e(Constants.TAG, "error: ${e.localizedMessage}")
         }
+
         mSocket.on(Socket.EVENT_CONNECT, onConnect)
         mSocket.on("disconnect", onConnectionError)
         mSocket.on("chat message", onMessage)
