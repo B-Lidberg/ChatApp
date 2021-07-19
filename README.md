@@ -6,7 +6,7 @@
 * Improve knowledge on Coroutines by implementing numerous server/db calls asynchronously
 * Practice UI/UX through Material Design
 * Improve server-side knowledge utilizing websockets and RESTful services
-* Learn how to implement and practice with websockets/REST calls inside of an Android App
+* Practice handling network calls
 
 ---
 ### Technologies:
