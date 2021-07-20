@@ -1,6 +1,7 @@
 package com.lid.chatapp.presentation
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -12,6 +13,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -74,6 +76,7 @@ fun ChatBox(messages: List<ChatMessage>, modifier: Modifier = Modifier) {
                 message = message.content,
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
+            Spacer(modifier = Modifier.padding(vertical = 16.dp))
         }
     }
 }

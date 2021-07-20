@@ -28,6 +28,17 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+    fun registerWithEmailAndPassword(email: String, password: String) = viewModelScope.launch {
+        try {
+            loadingState.emit(LoadingState.LOADING)
+            Firebase.auth.createUserWithEmailAndPassword(email, password).await()
+            loadingState.emit(LoadingState.LOADED)
+
+        } catch (e: Exception) {
+            loadingState.emit(LoadingState.error(e.localizedMessage))
+        }
+    }
+
     fun signWithCredential(credential: AuthCredential) = viewModelScope.launch {
         try {
             loadingState.emit(LoadingState.LOADING)
@@ -38,9 +49,19 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    enum class Screen {
-        LOGIN,
-        CHAT
+    fun signInAsGuest(username: String) = viewModelScope.launch {
+        loadingState.emit(LoadingState.LOADING)
+        loadingState.emit(LoadingState.LOADED)
+    }
+
+    private fun setUserData(username: String) {
+        viewModelScope.launch {
+        }
+    }
+
+    fun signOut() = viewModelScope.launch {
+        Firebase.auth.signOut()
+
     }
 }
 
