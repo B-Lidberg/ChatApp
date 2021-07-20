@@ -14,7 +14,9 @@ import com.lid.chatapp.ui.theme.ChatAppTheme
 
 @Composable
 fun MainScreen() {
+
     val snackbarHostState = remember { SnackbarHostState() }
+
 
     ProvideWindowInsets(windowInsetsAnimationsEnabled = true) {
         ChatAppTheme {

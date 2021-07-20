@@ -11,5 +11,5 @@ sealed class NavigationItem(var route: String, var icon: ImageVector, var title:
     object BreakingNews : NavigationItem("home", Icons.Default.Announcement, "Home")
     object Chat : NavigationItem("chat", Icons.Default.ChatBubble, "Chat")
     object Bookmarked : NavigationItem("bookmarked", Icons.Default.Bookmarks, "Bookmarked")
-    object Profile : NavigationItem("profile", Icons.Default.Person, "Profile")
+    object Account : NavigationItem("account", Icons.Default.Person, "Account")
 }

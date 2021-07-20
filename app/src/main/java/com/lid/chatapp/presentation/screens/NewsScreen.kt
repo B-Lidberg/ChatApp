@@ -17,19 +17,24 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.coil.rememberCoilPainter
 import com.lid.chatapp.data.model.Article
 import com.lid.chatapp.presentation.viewmodels.NewsViewModel
 
 @Composable
-fun NewsScreen(viewModel: NewsViewModel) {
+fun NewsScreen(viewModel: NewsViewModel = hiltViewModel()) {
     ArticleList(viewModel)
 }
 
 @Composable
 fun ChatAppTopBar(contentPadding: PaddingValues) {
     TopAppBar(contentPadding = contentPadding) {
-        Text("News Chatting App", style = MaterialTheme.typography.h5)
+        Text(
+            "News Chatting App",
+            style = MaterialTheme.typography.h5,
+            modifier = Modifier.padding(horizontal = 24.dp)
+        )
     }
 }
 

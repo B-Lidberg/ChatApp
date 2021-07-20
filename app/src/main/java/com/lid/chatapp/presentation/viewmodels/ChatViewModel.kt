@@ -21,7 +21,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChatViewModel @Inject constructor(
-    private val repo: ChatRepo
+    private val repo: ChatRepo,
 ) : ViewModel() {
 
     private lateinit var mSocket: Socket
@@ -34,16 +34,16 @@ class ChatViewModel @Inject constructor(
         Log.e(Constants.TAG, "connection error")
     }
     private val onMessage = Emitter.Listener {
-        GlobalScope.launch(Dispatchers.IO) {
+        GlobalScope.launch {
             val message: ChatMessage = gson.fromJson(it[0].toString(), ChatMessage::class.java)
             Log.d(Constants.TAG, "onMessage called for $message")
             addMessage(ChatMessage(content = message.content))
         }
     }
 
-    fun sendMessage(message: String) {
+    fun sendMessage(message: String, currentUser: String = "guest") {
         if (message.isNullOrEmpty()) return
-        val sendData = ChatMessage(content = message)
+        val sendData = ChatMessage(content = message, user = currentUser)
         val jsonData = gson.toJson(sendData)
         mSocket.emit("chat message", jsonData)
         clearCurrentMessage()
