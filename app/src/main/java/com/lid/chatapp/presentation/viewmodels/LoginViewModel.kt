@@ -54,11 +54,6 @@ class LoginViewModel @Inject constructor(
         loadingState.emit(LoadingState.LOADED)
     }
 
-    private fun setUserData(username: String) {
-        viewModelScope.launch {
-        }
-    }
-
     fun signOut() = viewModelScope.launch {
         Firebase.auth.signOut()
 

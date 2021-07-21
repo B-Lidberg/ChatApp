@@ -1,4 +1,4 @@
-package com.lid.chatapp.data.local
+package com.lid.chatapp.data.local.Chat
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

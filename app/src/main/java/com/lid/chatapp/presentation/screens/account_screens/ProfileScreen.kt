@@ -7,7 +7,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.lid.chatapp.presentation.viewmodels.LoginViewModel
 
 @Composable
-fun ProfileScreen(viewModel: LoginViewModel = hiltViewModel(), signOut: () -> Unit) {
+fun ProfileScreen() {
     Column() {
         Text("Logged in!")
     }

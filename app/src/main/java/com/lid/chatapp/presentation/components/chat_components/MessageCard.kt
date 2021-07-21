@@ -1,6 +1,5 @@
-package com.lid.chatapp.presentation
+package com.lid.chatapp.presentation.components
 
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme

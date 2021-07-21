@@ -1,8 +1,9 @@
-package com.lid.chatapp.data.local
+package com.lid.chatapp.data.local.Article
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.lid.chatapp.data.local.Converters
 import com.lid.chatapp.data.model.Article
 
 @Database(

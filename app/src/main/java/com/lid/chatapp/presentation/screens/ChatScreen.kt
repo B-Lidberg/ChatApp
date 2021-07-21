@@ -1,23 +1,18 @@
-package com.lid.chatapp.presentation
+package com.lid.chatapp.presentation.screens
 
 import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.lid.chatapp.data.model.ChatMessage
+import com.lid.chatapp.presentation.components.ChatBox
 import com.lid.chatapp.presentation.viewmodels.ChatViewModel
 
 
@@ -30,27 +25,36 @@ fun ChatScreen(vm: ChatViewModel = hiltViewModel()) {
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Bottom
         ) {
-            OutlinedButton(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = { vm.clearChatHistory() }
-            ) {
-                Text("Clear Chat History")
-            }
+            ClearChatButton { vm.clearChatHistory() }
             ChatBox(messageList ?: emptyList(), modifier = Modifier.weight(1f))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                OutlinedTextField(
-                    value = currentMessage,
-                    onValueChange = { vm.onMessageTextChange(it) },
-                    modifier = Modifier
-                        .padding(16.dp),
-                    keyboardOptions = KeyboardOptions(
-                        capitalization = KeyboardCapitalization.Sentences
-                    )
-                )
-                PostMessageButton { vm.sendMessage(currentMessage) }
-            }
+            MessageBox(
+                message = currentMessage,
+                changeMessage = { vm.onMessageTextChange(it) },
+                sendMessage = { vm.sendMessage(it) }
+            )
         }
     }
+
+@Composable
+fun MessageBox(
+    message: String,
+    changeMessage: (String) -> Unit,
+    sendMessage: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        OutlinedTextField(
+            value = message,
+            onValueChange = { changeMessage(it) },
+            modifier = Modifier
+                .padding(16.dp),
+            keyboardOptions = KeyboardOptions(
+                capitalization = KeyboardCapitalization.Sentences
+            )
+        )
+        PostMessageButton { sendMessage(message) }
+    }
+}
 
 @Composable
 fun PostMessageButton(sendMessage: () -> Unit) {
@@ -65,18 +69,11 @@ fun PostMessageButton(sendMessage: () -> Unit) {
 }
 
 @Composable
-fun ChatBox(messages: List<ChatMessage>, modifier: Modifier = Modifier) {
-    LazyColumn(
-        modifier = modifier
-            .fillMaxWidth(),
-        reverseLayout = true
+fun ClearChatButton(clearChatHistory: () -> Unit) {
+    OutlinedButton(
+        modifier = Modifier.fillMaxWidth(),
+        onClick = { clearChatHistory() }
     ) {
-        items(items = messages.reversed()) { message ->
-            MessageCard(
-                message = message.content,
-                modifier = Modifier.padding(horizontal = 8.dp)
-            )
-            Spacer(modifier = Modifier.padding(vertical = 16.dp))
-        }
+        Text("Clear Chat History")
     }
 }

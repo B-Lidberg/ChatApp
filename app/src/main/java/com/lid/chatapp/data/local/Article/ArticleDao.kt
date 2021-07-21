@@ -1,4 +1,4 @@
-package com.lid.chatapp.data.local
+package com.lid.chatapp.data.local.Article
 
 import androidx.room.Dao
 import androidx.room.Delete

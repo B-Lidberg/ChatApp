@@ -1,6 +1,5 @@
 package com.lid.chatapp.data.repositories
 
-import com.lid.chatapp.data.local.ArticleDao
 import com.lid.chatapp.data.model.NewsResponse
 import com.lid.chatapp.data.remote.NewsApi
 import com.lid.chatapp.util.Resource

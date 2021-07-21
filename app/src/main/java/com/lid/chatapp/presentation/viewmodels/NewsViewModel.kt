@@ -12,9 +12,7 @@ import com.lid.chatapp.util.Constants.PAGE_SIZE
 import com.lid.chatapp.util.Constants.TAG
 import com.lid.chatapp.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,21 +23,16 @@ class NewsViewModel @Inject constructor(
     val breakingNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
     var breakingNewsPage = 1
 
-    val searchNews: MutableLiveData<Resource<NewsResponse>> = MutableLiveData()
-    var searchNewsPage = 1
-
     val newsList = mutableStateOf<List<Article>>(listOf())
     var loadError = mutableStateOf("")
     var isLoading = mutableStateOf(false)
     var endReached = mutableStateOf(false)
 
-    var cachedNewsList = listOf<Article>()
-
     init {
         loadArticlesPaginated()
     }
 
-    fun loadArticlesPaginated() {
+    private fun loadArticlesPaginated() {
         viewModelScope.launch {
             isLoading.value = true
             val result = newsRepo.getBreakingNews("us", breakingNewsPage)
@@ -62,27 +55,4 @@ class NewsViewModel @Inject constructor(
             }
         }
     }
-
-
-    fun getBreakingNews(countryCode: String) = viewModelScope.launch {
-        breakingNews.postValue(Resource.Loading())
-        val response = newsRepo.getBreakingNews(countryCode, breakingNewsPage)
-        breakingNews.postValue(response)
-    }
-//
-//    private fun handleNewsResponse(response: Resource<NewsResponse>): Resource<NewsResponse> {
-//        if (response.isSuccessful) {
-//            response.body()?.let { resultResponse ->
-//                return Resource.Success(resultResponse)
-//            }
-//        }
-//        return Resource.Error(response.message())
-//    }
-
-    fun searchNews(searchQuery: String) = viewModelScope.launch {
-        searchNews.postValue(Resource.Loading())
-        val response = newsRepo.searchNews(searchQuery, searchNewsPage)
-        searchNews.postValue(response)
-    }
-
 }

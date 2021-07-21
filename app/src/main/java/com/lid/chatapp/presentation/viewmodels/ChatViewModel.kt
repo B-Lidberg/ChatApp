@@ -2,9 +2,9 @@ package com.lid.chatapp.presentation.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.*
+import com.google.gson.Gson
 import com.lid.chatapp.data.model.ChatMessage
 import com.lid.chatapp.data.repositories.ChatRepo
-import com.lid.chatapp.gson
 import com.lid.chatapp.util.Constants
 import com.lid.chatapp.util.Constants.PORT
 import com.lid.chatapp.util.Constants.WEBSOCKET_LOCALHOST
@@ -12,17 +12,19 @@ import com.lid.chatapp.util.Constants.WEBSOCKET_PHONE_IP
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.socket.client.Socket
 import io.socket.emitter.Emitter
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.net.URISyntaxException
 import javax.inject.Inject
 
+// TODO("Refactor socket connection outside of ViewModel & Inject in")
 @HiltViewModel
 class ChatViewModel @Inject constructor(
     private val repo: ChatRepo,
 ) : ViewModel() {
+
+    val gson: Gson = Gson()
 
     private lateinit var mSocket: Socket
 
@@ -51,6 +53,7 @@ class ChatViewModel @Inject constructor(
 
     init {
         try {
+            // TODO("Check socket to connect to instead of connecting to both")
             mSocket = io.socket.client.IO.socket(WEBSOCKET_LOCALHOST + PORT)
             mSocket = io.socket.client.IO.socket(WEBSOCKET_PHONE_IP + PORT)
 

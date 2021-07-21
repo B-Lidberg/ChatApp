@@ -1,14 +1,13 @@
-package com.lid.chatapp
+package com.lid.chatapp.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.lid.chatapp.presentation.BookmarkScreen
-import com.lid.chatapp.presentation.ChatScreen
-import com.lid.chatapp.presentation.LoginScreen
-import com.lid.chatapp.presentation.NewsScreen
-import com.lid.chatapp.navigation.NavigationItem
+import com.lid.chatapp.presentation.screens.ChatScreen
+import com.lid.chatapp.presentation.screens.account_screens.LoginScreen
+import com.lid.chatapp.presentation.screens.NewsScreen
 
 @Composable
 fun Navigation(navController: NavHostController) {
@@ -21,7 +20,7 @@ fun Navigation(navController: NavHostController) {
             NewsScreen()
         }
         composable(NavigationItem.Account.route) {
-            LoginScreen() { }
+            LoginScreen()
         }
         composable(NavigationItem.Chat.route) {
             ChatScreen()
