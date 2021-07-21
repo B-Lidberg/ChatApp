@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.*
 import com.lid.chatapp.Navigation
-import com.lid.chatapp.presentation.components.BottomNavigationBar
+import com.lid.chatapp.navigation.BottomNavigationBar
 import com.lid.chatapp.ui.theme.ChatAppTheme
 
 @Composable

@@ -1,4 +1,4 @@
-package com.lid.chatapp.presentation.components
+package com.lid.chatapp.navigation
 
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
