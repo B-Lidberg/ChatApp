@@ -8,7 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lid.chatapp.data.model.Article
 import com.lid.chatapp.presentation.components.news_components.NewsArticleCard
-import com.lid.chatapp.presentation.viewmodels.NewsViewModel
+import com.lid.chatapp.viewmodels.NewsViewModel
 
 @Composable
 fun NewsScreen(viewModel: NewsViewModel = hiltViewModel()) {

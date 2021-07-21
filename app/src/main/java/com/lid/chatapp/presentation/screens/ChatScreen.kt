@@ -13,7 +13,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.lid.chatapp.presentation.components.ChatBox
-import com.lid.chatapp.presentation.viewmodels.ChatViewModel
+import com.lid.chatapp.viewmodels.ChatViewModel
 
 
 @Composable

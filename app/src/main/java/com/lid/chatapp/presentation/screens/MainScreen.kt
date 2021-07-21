@@ -8,10 +8,10 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.*
-import com.lid.chatapp.navigation.Navigation
-import com.lid.chatapp.navigation.BottomNavigationBar
+import com.lid.chatapp.presentation.navigation.Navigation
+import com.lid.chatapp.presentation.navigation.BottomNavigationBar
 import com.lid.chatapp.presentation.components.ChatAppTopBar
-import com.lid.chatapp.ui.theme.ChatAppTheme
+import com.lid.chatapp.presentation.ui.theme.ChatAppTheme
 
 @Composable
 fun MainScreen() {

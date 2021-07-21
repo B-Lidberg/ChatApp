@@ -1,4 +1,4 @@
-package com.lid.chatapp.presentation.viewmodels
+package com.lid.chatapp.viewmodels
 
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf

@@ -1,4 +1,4 @@
-package com.lid.chatapp.presentation.viewmodels
+package com.lid.chatapp.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.*
@@ -24,7 +24,7 @@ class ChatViewModel @Inject constructor(
     private val repo: ChatRepo,
 ) : ViewModel() {
 
-    val gson: Gson = Gson()
+    private val gson: Gson = Gson()
 
     private lateinit var mSocket: Socket
 

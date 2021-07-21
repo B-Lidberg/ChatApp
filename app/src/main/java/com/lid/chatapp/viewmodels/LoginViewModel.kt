@@ -1,4 +1,4 @@
-package com.lid.chatapp.presentation.viewmodels
+package com.lid.chatapp.viewmodels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

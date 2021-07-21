@@ -1,4 +1,4 @@
-package com.lid.chatapp.ui.theme
+package com.lid.chatapp.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

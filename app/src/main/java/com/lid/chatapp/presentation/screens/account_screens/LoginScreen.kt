@@ -7,14 +7,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
-import com.lid.chatapp.util.LoadingState
 import com.lid.chatapp.presentation.components.EmailAndPasswordOption
 import com.lid.chatapp.presentation.components.GoogleSignInButton
 import com.lid.chatapp.presentation.components.GuestLoginOption
-import com.lid.chatapp.presentation.viewmodels.LoginViewModel
-import kotlinx.coroutines.launch
+import com.lid.chatapp.viewmodels.LoginViewModel
 
 enum class LoginState {
     LOGIN,
