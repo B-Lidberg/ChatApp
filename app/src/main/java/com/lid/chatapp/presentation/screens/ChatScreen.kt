@@ -36,7 +36,7 @@ import com.lid.chatapp.viewmodels.ChatViewModel
 fun ChatScreen(vm: ChatViewModel = hiltViewModel()) {
     val currentMessage by vm.messageText.observeAsState("")
     val messageList by vm.allMessages.observeAsState()
-    val username by vm.currentUsername.observeAsState("")
+    val username by vm.currentUsername.observeAsState(vm.currentUsername.value ?: "")
 
 
 

@@ -25,15 +25,15 @@ fun ChatBox(messages: List<ChatMessage>, username: String, modifier: Modifier = 
 
     ) {
         items(items = messages.reversed()) { message ->
+            val isUserMessage = message.user == username
             Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = if (message.user == username) Arrangement.End else Arrangement.Start
+                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                horizontalArrangement = if (isUserMessage) Arrangement.End else Arrangement.Start
             ) {
                 MessageCard(
-                    messageText = message.content,
-                    messageUser = message.user!!,
+                    message = message,
                     modifier = Modifier.padding(horizontal = 8.dp),
-                    backgroundColor = if (message.user == username) Color.Green else Color.Cyan
+                    isUserMessage = isUserMessage,
                 )
                 Spacer(modifier = Modifier.padding(vertical = 16.dp))
             }
