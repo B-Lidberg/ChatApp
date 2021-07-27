@@ -11,6 +11,9 @@ object Constants {
     const val USER_DATASTORE_NAME = "user_data"
     const val USER_DATASTORE_FILE_NAME = "user_data.pb"
 
+    const val NO_USERNAME = "NO_USERNAME"
+    const val NO_PASSWORD = "NO_PASSWORD"
+
     // Chat Connections
     const val WEBSOCKET_LOCALHOST = "ws://10.0.2.2:"
     const val WEBSOCKET_PHONE_IP = "http://192.168.1.202:"

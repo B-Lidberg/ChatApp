@@ -5,6 +5,7 @@ plugins {
     id 'dagger.hilt.android.plugin'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
+    id "com.google.protobuf"
 
 }
 
@@ -46,6 +47,25 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion compose_version
         kotlinCompilerVersion '1.5.10'
+    }
+}
+
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:$google_protobuf_version"
+    }
+
+    // Generates the java Protobuf-lite code for the Protobufs in this project. See
+    // https://github.com/google/protobuf-gradle-plugin#customizing-protobuf-compilation
+    // for more information.
+    generateProtoTasks {
+        all().each { task ->
+            task.builtins {
+                java {
+                    option 'lite'
+                }
+            }
+        }
     }
 }
 
@@ -130,6 +150,11 @@ dependencies {
 
     // Paging
     implementation "androidx.paging:paging-compose:1.0.0-alpha11"
+
+    // DataStore
+    implementation  "androidx.datastore:datastore-core:1.0.0-rc02"
+    implementation  "androidx.datastore:datastore:1.0.0-rc02"
+    implementation  "com.google.protobuf:protobuf-javalite:$google_protobuf_version"
 
     // Accompanist: Coil , Insets
     def accompanist_version = '0.13.0'

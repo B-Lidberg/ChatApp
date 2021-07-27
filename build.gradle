@@ -4,6 +4,7 @@ buildscript {
         compose_version = '1.0.0-rc01'
         kotlin_version = '1.5.10'
         hilt_version = '2.35.1'
+        ext.google_protobuf_version = "3.15.7"
     }
     repositories {
         google()
@@ -16,6 +17,7 @@ buildscript {
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_version"
         classpath 'com.google.gms:google-services:4.3.8'
         classpath 'com.google.firebase:firebase-crashlytics-gradle:2.5.2'
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.16'
 
 
         // NOTE: Do not place your application dependencies here; they belong

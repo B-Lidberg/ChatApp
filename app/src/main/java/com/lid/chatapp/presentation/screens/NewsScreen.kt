@@ -12,8 +12,8 @@ import com.lid.chatapp.viewmodels.NewsViewModel
 
 @Composable
 fun NewsScreen(viewModel: NewsViewModel = hiltViewModel()) {
-    val articleList by remember { viewModel.newsList }
-    ArticleList(articleList)
+//    val articleList by remember { viewModel.newsList }
+    ArticleList(viewModel.newsList.value)
 }
 
 @Composable

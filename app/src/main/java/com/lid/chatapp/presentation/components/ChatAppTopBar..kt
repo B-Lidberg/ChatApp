@@ -10,8 +10,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ChatAppTopBar(contentPadding: PaddingValues) {
-    TopAppBar(contentPadding = contentPadding) {
+fun ChatAppTopBar(
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
+) {
+    TopAppBar(
+        contentPadding = contentPadding,
+        modifier = modifier
+    ) {
         Text(
             "News Chatting App",
             style = MaterialTheme.typography.h5,

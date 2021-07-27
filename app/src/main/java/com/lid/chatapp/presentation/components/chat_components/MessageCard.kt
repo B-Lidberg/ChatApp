@@ -1,5 +1,7 @@
 package com.lid.chatapp.presentation.components
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -12,16 +14,28 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun MessageCard(
-    message: String,
+    messageText: String,
+    messageUser: String,
     modifier: Modifier = Modifier,
     backgroundColor: Color = MaterialTheme.colors.surface
 ) {
     Card(modifier = modifier, backgroundColor = backgroundColor) {
-        Text(
-            text = message,
-            style = MaterialTheme.typography.body1,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.padding(8.dp)
-        )
+        Column() {
+            Text(
+                text = "$messageUser:",
+                style = MaterialTheme.typography.body1,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(8.dp),
+                color = Color.Black
+            )
+            Text(
+                text = messageText,
+                style = MaterialTheme.typography.body1,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(8.dp),
+                color = Color.Black
+
+            )
+        }
     }
 }

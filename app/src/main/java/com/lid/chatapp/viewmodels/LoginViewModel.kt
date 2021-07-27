@@ -1,10 +1,11 @@
 package com.lid.chatapp.viewmodels
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.lid.chatapp.data.repositories.AccountRepo
+import com.lid.chatapp.util.Constants
 import com.lid.chatapp.util.LoadingState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,9 +15,36 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
+    private val accountRepo: AccountRepo
 ) : ViewModel() {
 
+    private val userDataFlow = accountRepo.userDataFlow
+
+    val userData = userDataFlow.asLiveData()
+
+    private val _signedIn: MutableLiveData<Boolean> = MutableLiveData()
+    val signedIn: LiveData<Boolean> = _signedIn
+
     val loadingState = MutableStateFlow(LoadingState.IDLE)
+
+
+    private fun setLoginBoolean() {
+        val username = userData.value?.username
+        val password = userData.value?.password
+        _signedIn.value =
+            username != Constants.NO_USERNAME &&
+                    !username.isNullOrEmpty() &&
+                    !password.isNullOrEmpty()
+    }
+
+    fun signOut() {
+        viewModelScope.launch {
+            accountRepo.clearUserData()
+            Firebase.auth.signOut()
+
+        }
+        setLoginBoolean()
+    }
 
     fun signInWithEmailAndPassword(email: String, password: String) = viewModelScope.launch {
         try {
@@ -51,12 +79,9 @@ class LoginViewModel @Inject constructor(
 
     fun signInAsGuest(username: String) = viewModelScope.launch {
         loadingState.emit(LoadingState.LOADING)
+        accountRepo.setUserData(username)
         loadingState.emit(LoadingState.LOADED)
     }
 
-    fun signOut() = viewModelScope.launch {
-        Firebase.auth.signOut()
-
-    }
 }
 

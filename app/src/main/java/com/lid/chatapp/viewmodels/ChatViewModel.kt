@@ -1,6 +1,7 @@
 package com.lid.chatapp.viewmodels
 
 import android.util.Log
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.lifecycle.*
 import com.google.gson.Gson
 import com.lid.chatapp.data.model.ChatMessage
@@ -14,6 +15,7 @@ import io.socket.client.Socket
 import io.socket.emitter.Emitter
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.net.URISyntaxException
 import javax.inject.Inject
@@ -23,6 +25,15 @@ import javax.inject.Inject
 class ChatViewModel @Inject constructor(
     private val repo: ChatRepo,
 ) : ViewModel() {
+
+
+    private val userDataFlow = repo.userDataFlow
+
+    val userData = userDataFlow.asLiveData()
+
+    val currentUsername = userDataFlow.map { user ->
+        user.username
+    }.asLiveData()
 
     private val gson: Gson = Gson()
 
@@ -39,13 +50,13 @@ class ChatViewModel @Inject constructor(
         GlobalScope.launch {
             val message: ChatMessage = gson.fromJson(it[0].toString(), ChatMessage::class.java)
             Log.d(Constants.TAG, "onMessage called for $message")
-            addMessage(ChatMessage(content = message.content))
+            addMessage(ChatMessage(content = message.content, user = message.user))
         }
     }
 
-    fun sendMessage(message: String, currentUser: String = "guest") {
+    fun sendMessage(message: String) {
         if (message.isNullOrEmpty()) return
-        val sendData = ChatMessage(content = message, user = currentUser)
+        val sendData = ChatMessage(content = message, user = currentUsername.value ?: "guest")
         val jsonData = gson.toJson(sendData)
         mSocket.emit("chat message", jsonData)
         clearCurrentMessage()
