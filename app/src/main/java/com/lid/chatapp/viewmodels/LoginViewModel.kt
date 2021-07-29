@@ -9,6 +9,7 @@ import com.lid.chatapp.util.Constants
 import com.lid.chatapp.util.LoadingState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -22,8 +23,9 @@ class LoginViewModel @Inject constructor(
 
     val userData = userDataFlow.asLiveData()
 
-    private val _signedIn: MutableLiveData<Boolean> = MutableLiveData()
-    val signedIn: LiveData<Boolean> = _signedIn
+    val currentUsername = userDataFlow.map { user ->
+        user.username
+    }.asLiveData()
 
     val loadingState = MutableStateFlow(LoadingState.IDLE)
 
@@ -31,16 +33,17 @@ class LoginViewModel @Inject constructor(
     private fun setLoginBoolean() {
         val username = userData.value?.username
         val password = userData.value?.password
-        _signedIn.value =
-            username != Constants.NO_USERNAME &&
-                    !username.isNullOrEmpty() &&
-                    !password.isNullOrEmpty()
+//        _signedIn.value =
+//            username != Constants.NO_USERNAME &&
+//                    !username.isNullOrEmpty() &&
+//                    !password.isNullOrEmpty()
     }
 
     fun signOut() {
         viewModelScope.launch {
             accountRepo.clearUserData()
             Firebase.auth.signOut()
+//            _signedIn.postValue(false)
 
         }
         setLoginBoolean()
@@ -80,6 +83,7 @@ class LoginViewModel @Inject constructor(
     fun signInAsGuest(username: String) = viewModelScope.launch {
         loadingState.emit(LoadingState.LOADING)
         accountRepo.setUserData(username)
+//        _signedIn.postValue(true)
         loadingState.emit(LoadingState.LOADED)
     }
 

@@ -3,6 +3,7 @@ package com.lid.chatapp.presentation.screens.account_screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -26,6 +27,7 @@ fun LoginScreen(viewModel: LoginViewModel = hiltViewModel()) {
 */
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
+    val username by viewModel.currentUsername.observeAsState(viewModel.currentUsername.value)
 
     Column(
         modifier = Modifier
@@ -44,11 +46,17 @@ fun LoginScreen(viewModel: LoginViewModel = hiltViewModel()) {
 
         GoogleSignInButton { viewModel.signWithCredential(it) }
 
-        Button(onClick = { viewModel.signOut() }) {
+        Button(enabled = !username.isNullOrEmpty(), onClick = { viewModel.signOut() }) {
             Text("Sign Out")
         }
 
         GuestLoginOption { viewModel.signInAsGuest(it) }
+
+        if (!username.isNullOrEmpty()) {
+            Text("Welcome $username!")
+        } else {
+            Text("Try signing in as a guest")
+        }
 
     }
 /*
