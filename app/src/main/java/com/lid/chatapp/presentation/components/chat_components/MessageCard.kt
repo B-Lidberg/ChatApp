@@ -28,9 +28,13 @@ fun MessageCard(
 ) {
     Card(
         modifier = modifier,
-        backgroundColor = Color.Transparent
+        backgroundColor = Color.Transparent,
+        elevation = 0.dp
     ) {
-        Row(verticalAlignment = Alignment.Top, modifier = Modifier.padding(end = 4.dp)) {
+        Row(
+            verticalAlignment = Alignment.Top,
+            modifier = Modifier.padding(end = 4.dp)
+        ) {
             if (!isUserMessage) {
                 Surface(
                     shape = CircleShape,
@@ -42,7 +46,15 @@ fun MessageCard(
                 )
             }
 
-                Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.Start) {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.Start,
+                    modifier = if (isUserMessage) {
+                        Modifier.padding(start = 32.dp)
+                    } else {
+                        Modifier.padding(end = 32.dp)
+                    }
+                ) {
                 if (!isUserMessage) {
                     Text(
                         text = "${message.user}",
@@ -55,8 +67,8 @@ fun MessageCard(
                 }
                 Surface(
                     color = (if (isUserMessage) Color.Green else Color.Cyan),
-                    shape = RoundedCornerShape(bottomStart = 4.dp, bottomEnd = 4.dp, topEnd = 4.dp),
-                    modifier = Modifier.defaultMinSize(40.dp)
+                    shape = RoundedCornerShape(bottomStart = 6.dp, bottomEnd = 6.dp, topEnd = 6.dp),
+                    modifier = Modifier.defaultMinSize(minWidth = 40.dp)
                 ) {
                     Text(
                         text = message.content,

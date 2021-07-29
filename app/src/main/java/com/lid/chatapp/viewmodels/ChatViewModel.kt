@@ -1,6 +1,7 @@
 package com.lid.chatapp.viewmodels
 
 import android.util.Log
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.lifecycle.*
 import com.google.gson.Gson
@@ -19,6 +20,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.net.URISyntaxException
 import javax.inject.Inject
+import kotlin.random.Random
 
 // TODO("Refactor socket connection outside of ViewModel & Inject in")
 @HiltViewModel
@@ -56,7 +58,7 @@ class ChatViewModel @Inject constructor(
 
     fun sendMessage(message: String) {
         if (message.isNullOrEmpty()) return
-        val sendData = ChatMessage(content = message, user = currentUsername.value ?: "guest")
+        val sendData = ChatMessage(content = message, user = currentUsername.value)
         val jsonData = gson.toJson(sendData)
         mSocket.emit("chat message", jsonData)
         clearCurrentMessage()

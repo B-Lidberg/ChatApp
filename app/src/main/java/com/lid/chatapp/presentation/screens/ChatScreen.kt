@@ -28,6 +28,7 @@ import com.google.accompanist.insets.ExperimentalAnimatedInsets
 import com.google.accompanist.insets.LocalWindowInsets
 import com.lid.chatapp.presentation.components.ChatBox
 import com.lid.chatapp.viewmodels.ChatViewModel
+import kotlinx.coroutines.flow.collect
 
 
 @ExperimentalAnimatedInsets
@@ -36,7 +37,7 @@ import com.lid.chatapp.viewmodels.ChatViewModel
 fun ChatScreen(vm: ChatViewModel = hiltViewModel()) {
     val currentMessage by vm.messageText.observeAsState("")
     val messageList by vm.allMessages.observeAsState()
-    val username by vm.currentUsername.observeAsState(vm.currentUsername.value ?: "")
+    val username by vm.currentUsername.observeAsState(vm.currentUsername.value ?: "guest")
 
 
 
@@ -45,10 +46,10 @@ fun ChatScreen(vm: ChatViewModel = hiltViewModel()) {
             verticalArrangement = Arrangement.Bottom,
         ) {
             ClearChatButton { vm.clearChatHistory() }
-            Text(username ?: "NO_USERNAME")
             ChatBox(messageList ?: emptyList(), username = username,  modifier = Modifier.weight(1f))
             MessageBox(
                 message = currentMessage,
+                username = username,
                 changeMessage = { vm.onMessageTextChange(it) },
                 sendMessage = { vm.sendMessage(it) },
             )
@@ -60,6 +61,7 @@ fun ChatScreen(vm: ChatViewModel = hiltViewModel()) {
 @Composable
 fun MessageBox(
     message: String,
+    username: String,
     changeMessage: (String) -> Unit,
     sendMessage: (String) -> Unit,
     modifier: Modifier = Modifier
@@ -81,10 +83,10 @@ fun MessageBox(
         TextField(
             value = message,
             onValueChange = { changeMessage(it) },
-//                .navigationBarsWithImePadding(),
             keyboardOptions = KeyboardOptions(
                 capitalization = KeyboardCapitalization.Sentences
             ),
+            placeholder = { Text( if (username == "") "Try signing in!" else "Enter message as $username") },
             colors = TextFieldDefaults.textFieldColors(
                 focusedIndicatorColor = Color.Transparent,
                 disabledIndicatorColor = Color.Transparent,
@@ -135,16 +137,10 @@ fun PostMessageButton(sendMessage: () -> Unit, hideKeyboard: () -> Unit?) {
 @Composable
 fun ClearChatButton(clearChatHistory: () -> Unit) {
     OutlinedButton(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().padding(top = 25.dp),
         onClick = { clearChatHistory() }
     ) {
         Text("Clear Chat History")
     }
 }
 
-@ExperimentalComposeUiApi
-@Preview
-@Composable
-fun MessageBoxPreview() {
-    MessageBox(message = "", changeMessage = { }, sendMessage = {})
-}

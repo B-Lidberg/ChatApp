@@ -6,6 +6,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.insets.*
@@ -39,12 +40,12 @@ fun ChatAppFrame(
 ) {
     Scaffold(
         scaffoldState = scaffoldState,
-        topBar = {
-            ChatAppTopBar(
-                contentPadding = rememberInsetsPaddingValues(
-                insets = LocalWindowInsets.current.statusBars),
-            )
-         },
+//        topBar = {
+//            ChatAppTopBar(
+//                contentPadding = rememberInsetsPaddingValues(
+//                insets = LocalWindowInsets.current.statusBars),
+//            )
+//         },
         bottomBar = {
             BottomNavigationBar(navController = navController)
         },
