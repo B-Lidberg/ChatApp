@@ -15,14 +15,33 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.coil.rememberCoilPainter
+import coil.compose.rememberImagePainter
 import com.lid.chatapp.data.model.Article
+
+@Preview
+@Composable
+fun ImagePreview() {
+    Card() {
+        Image(
+            painter = rememberImagePainter("com.android.providers.media.documents/document/image%3A51074"),
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(225.dp),
+            contentScale = ContentScale.Crop
+        )
+    }
+}
 
 @Composable
 fun NewsArticleCard(article: Article, modifier: Modifier = Modifier) {
-    val painter = rememberCoilPainter(article.urlToImage)
+    val painter = rememberImagePainter(article.urlToImage)
 
-    Card(modifier = modifier.padding(12.dp), elevation = 4.dp, shape = RoundedCornerShape(8.dp)) {
+    Card(
+        modifier = modifier.padding(12.dp),
+        elevation = 4.dp,
+        shape = RoundedCornerShape(8.dp)
+    ) {
         Column(modifier = Modifier.fillMaxSize()) {
             Image(
                 painter = painter,
