@@ -9,6 +9,7 @@
 * Practice handling network calls
 
 ---
+
 ### Technologies:
 * #### Language: Kotlin
 * #### Server: node.js server
