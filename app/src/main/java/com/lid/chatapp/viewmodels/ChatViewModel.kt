@@ -22,7 +22,7 @@ import java.net.URISyntaxException
 import javax.inject.Inject
 import kotlin.random.Random
 
-// TODO("Refactor socket connection outside of ViewModel & Inject in")
+// TODO("ISSUE #2: Refactor socket connection outside of ViewModel & Inject in")
 @HiltViewModel
 class ChatViewModel @Inject constructor(
     private val repo: ChatRepo,
@@ -66,7 +66,7 @@ class ChatViewModel @Inject constructor(
 
     init {
         try {
-            // TODO("Check socket to connect to instead of connecting to both")
+            // TODO("ISSUE #1: Check socket to connect to instead of connecting to both")
             mSocket = io.socket.client.IO.socket(WEBSOCKET_LOCALHOST + PORT)
             mSocket = io.socket.client.IO.socket(WEBSOCKET_PHONE_IP + PORT)
 

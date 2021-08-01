@@ -22,7 +22,7 @@ enum class LoginState {
 fun LoginScreen(viewModel: LoginViewModel = hiltViewModel()) {
 
 /*
-    TODO("Add Snackbar for loadingState SUCCESS and FAIL")
+    TODO("ISSUE #3: Add Snackbar for loadingState SUCCESS and FAIL")
     val loadingState by viewModel.loadingState.collectAsState()
 */
     val scaffoldState = rememberScaffoldState()
@@ -59,26 +59,4 @@ fun LoginScreen(viewModel: LoginViewModel = hiltViewModel()) {
         }
 
     }
-/*
-TODO("Add Snackbar for loadingState SUCCESS and FAIL")
-when (loadingState.status) {
-    LoadingState.Status.SUCCESS -> {
-        scope.launch {
-            scaffoldState.snackbarHostState.showSnackbar(
-                message = "Successfully logged in! ${Firebase.auth.currentUser?.email ?: ":)"}"
-            )
-        }
-    }
-    LoadingState.Status.FAILED -> {
-        scope.launch {
-            scaffoldState.snackbarHostState.showSnackbar(
-                message = loadingState.msg ?: "Error"
-            )
-        }
-    }
-    else -> {
-    }
-}
-*/
-
 }

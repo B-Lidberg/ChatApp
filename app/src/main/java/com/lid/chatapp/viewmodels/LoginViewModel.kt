@@ -53,6 +53,7 @@ class LoginViewModel @Inject constructor(
         try {
             loadingState.emit(LoadingState.LOADING)
             Firebase.auth.signInWithEmailAndPassword(email, password).await()
+//            TODO("ISSUE #4: Store email in DataStore")
             loadingState.emit(LoadingState.LOADED)
         } catch (e: Exception) {
             loadingState.emit(LoadingState.error(e.localizedMessage))
@@ -74,6 +75,7 @@ class LoginViewModel @Inject constructor(
         try {
             loadingState.emit(LoadingState.LOADING)
             Firebase.auth.signInWithCredential(credential).await()
+//            TODO("ISSUE #4: Store token in DataStore")
             loadingState.emit(LoadingState.LOADED)
         } catch (e: Exception) {
             loadingState.emit(LoadingState.error(e.localizedMessage))
