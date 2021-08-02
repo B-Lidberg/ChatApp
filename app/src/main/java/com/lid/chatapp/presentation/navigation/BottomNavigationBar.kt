@@ -1,7 +1,5 @@
 package com.lid.chatapp.presentation.navigation
 
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
@@ -9,11 +7,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.google.accompanist.insets.navigationBarsHeight
-import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.navigationBarsWithImePadding
 
 @Composable

@@ -1,5 +1,6 @@
 package com.lid.chatapp.presentation.navigation
 
+import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.NavHostController
@@ -10,11 +11,15 @@ import com.lid.chatapp.presentation.BookmarkScreen
 import com.lid.chatapp.presentation.screens.ChatScreen
 import com.lid.chatapp.presentation.screens.account_screens.LoginScreen
 import com.lid.chatapp.presentation.screens.NewsScreen
+import kotlinx.coroutines.CoroutineScope
 
 @ExperimentalAnimatedInsets
 @ExperimentalComposeUiApi
 @Composable
-fun Navigation(navController: NavHostController) {
+fun Navigation(
+    navController: NavHostController,
+    scaffoldState: ScaffoldState,
+) {
     NavHost(
         navController = navController,
         startDestination = NavigationItem.BreakingNews.route
@@ -24,7 +29,7 @@ fun Navigation(navController: NavHostController) {
             NewsScreen()
         }
         composable(NavigationItem.Account.route) {
-            LoginScreen()
+            LoginScreen(scaffoldState)
         }
         composable(NavigationItem.Chat.route) {
             ChatScreen()

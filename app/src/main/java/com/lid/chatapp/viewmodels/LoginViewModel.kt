@@ -5,7 +5,6 @@ import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.lid.chatapp.data.repositories.AccountRepo
-import com.lid.chatapp.util.Constants
 import com.lid.chatapp.util.LoadingState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,24 +28,11 @@ class LoginViewModel @Inject constructor(
 
     val loadingState = MutableStateFlow(LoadingState.IDLE)
 
-
-    private fun setLoginBoolean() {
-        val username = userData.value?.username
-        val password = userData.value?.password
-//        _signedIn.value =
-//            username != Constants.NO_USERNAME &&
-//                    !username.isNullOrEmpty() &&
-//                    !password.isNullOrEmpty()
-    }
-
     fun signOut() {
         viewModelScope.launch {
             accountRepo.clearUserData()
             Firebase.auth.signOut()
-//            _signedIn.postValue(false)
-
         }
-        setLoginBoolean()
     }
 
     fun signInWithEmailAndPassword(email: String, password: String) = viewModelScope.launch {
@@ -85,8 +71,8 @@ class LoginViewModel @Inject constructor(
     fun signInAsGuest(username: String) = viewModelScope.launch {
         loadingState.emit(LoadingState.LOADING)
         accountRepo.setUserData(username)
-//        _signedIn.postValue(true)
         loadingState.emit(LoadingState.LOADED)
+
     }
 
 }

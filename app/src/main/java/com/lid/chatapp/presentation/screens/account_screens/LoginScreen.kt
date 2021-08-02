@@ -12,6 +12,8 @@ import com.lid.chatapp.presentation.components.EmailAndPasswordOption
 import com.lid.chatapp.presentation.components.GoogleSignInButton
 import com.lid.chatapp.presentation.components.GuestLoginOption
 import com.lid.chatapp.viewmodels.LoginViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 enum class LoginState {
     LOGIN,
@@ -19,44 +21,58 @@ enum class LoginState {
 }
 
 @Composable
-fun LoginScreen(viewModel: LoginViewModel = hiltViewModel()) {
-
-/*
-    TODO("ISSUE #3: Add Snackbar for loadingState SUCCESS and FAIL")
-    val loadingState by viewModel.loadingState.collectAsState()
-*/
-    val scaffoldState = rememberScaffoldState()
+fun LoginScreen(scaffoldState: ScaffoldState, viewModel: LoginViewModel = hiltViewModel()) {
+    val username by viewModel.currentUsername.observeAsState(viewModel.currentUsername.value ?: "")
     val scope = rememberCoroutineScope()
-    val username by viewModel.currentUsername.observeAsState(viewModel.currentUsername.value)
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(24.dp),
-        verticalArrangement = Arrangement.spacedBy(18.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        EmailAndPasswordOption(
-            scope,
-            scaffoldState,
-            { email, password -> viewModel.signInWithEmailAndPassword(email, password) },
-            { email, password -> viewModel.registerWithEmailAndPassword(email, password) },
-        )
-        Spacer(modifier = Modifier.height(18.dp))
+    Scaffold(scaffoldState = scaffoldState) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp),
+            verticalArrangement = Arrangement.spacedBy(18.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            EmailAndPasswordOption(
+                scope,
+                scaffoldState,
+                { email, password -> viewModel.signInWithEmailAndPassword(email, password) },
+                { email, password -> viewModel.registerWithEmailAndPassword(email, password) },
+            )
+            Spacer(modifier = Modifier.height(18.dp))
 
-        GoogleSignInButton { viewModel.signWithCredential(it) }
+            GoogleSignInButton { viewModel.signWithCredential(it) }
 
-        Button(enabled = !username.isNullOrEmpty(), onClick = { viewModel.signOut() }) {
-            Text("Sign Out")
+            Button(
+                enabled = !username.isNullOrEmpty(),
+                onClick = {
+                    viewModel.signOut()
+                    scope.launch {
+                        scaffoldState.snackbarHostState.showSnackbar(
+                            "Goodbye $username!"
+                        )
+                    }
+                },
+
+            ) {
+                Text("Sign Out")
+            }
+
+            GuestLoginOption(
+                signIn = { viewModel.signInAsGuest(it) },
+                displaySnackbar = {
+                    scope.launch {
+                    scaffoldState.snackbarHostState.showSnackbar(
+                    "Welcome Guest: $it!")
+                    }
+                }
+            )
+            if (!username.isNullOrEmpty()) {
+                Text("Welcome $username!")
+            } else {
+                Text("Try signing in as a guest")
+            }
+
         }
-
-        GuestLoginOption { viewModel.signInAsGuest(it) }
-
-        if (!username.isNullOrEmpty()) {
-            Text("Welcome $username!")
-        } else {
-            Text("Try signing in as a guest")
-        }
-
     }
 }

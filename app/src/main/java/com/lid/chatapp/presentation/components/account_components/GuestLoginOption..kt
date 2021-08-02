@@ -8,9 +8,11 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 
 @Composable
-fun GuestLoginOption(signIn: (String) -> Unit) {
+fun GuestLoginOption(signIn: (String) -> Unit, displaySnackbar: (String) -> Unit) {
     var tempUser by remember { mutableStateOf("") }
 
     OutlinedTextField(
@@ -23,7 +25,10 @@ fun GuestLoginOption(signIn: (String) -> Unit) {
             .fillMaxWidth()
             .height(50.dp),
         enabled = tempUser.isNotEmpty(),
-        onClick = { signIn(tempUser) }
+        onClick = {
+            signIn(tempUser)
+            displaySnackbar(tempUser)
+        }
     ) {
         Text("Login as guest")
     }
