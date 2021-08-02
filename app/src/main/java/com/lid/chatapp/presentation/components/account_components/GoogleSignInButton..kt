@@ -1,4 +1,4 @@
-package com.lid.chatapp.presentation.components
+package com.lid.chatapp.presentation.components.account_components
 
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -26,7 +26,10 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.lid.chatapp.R
 
 @Composable
-fun GoogleSignInButton(signInWithCredential: (AuthCredential) -> Unit) {
+fun GoogleSignInButton(
+    signInWithCredential: (AuthCredential) -> Unit,
+    displaySnackbar: (String) -> Unit
+) {
     val launcher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) {
             val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
@@ -34,7 +37,7 @@ fun GoogleSignInButton(signInWithCredential: (AuthCredential) -> Unit) {
                 val account = task.getResult(ApiException::class.java)!!
                 val credential = GoogleAuthProvider.getCredential(account.idToken!!, null)
                 signInWithCredential(credential)
-
+                displaySnackbar(account.email!!)
             } catch (e: ApiException) {
                 Log.w("TAG", "Google sign in failed", e)
             }

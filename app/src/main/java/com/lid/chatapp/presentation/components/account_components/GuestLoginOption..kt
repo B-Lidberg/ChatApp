@@ -1,4 +1,4 @@
-package com.lid.chatapp.presentation.components
+package com.lid.chatapp.presentation.components.account_components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -8,8 +8,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
 
 @Composable
 fun GuestLoginOption(signIn: (String) -> Unit, displaySnackbar: (String) -> Unit) {
