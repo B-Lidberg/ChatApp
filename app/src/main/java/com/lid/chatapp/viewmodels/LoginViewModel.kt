@@ -8,6 +8,7 @@ import com.lid.chatapp.data.repositories.AccountRepo
 import com.lid.chatapp.util.LoadingState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
@@ -74,8 +75,7 @@ class LoginViewModel @Inject constructor(
 
     fun signInAsGuest(username: String) = viewModelScope.launch {
         loadingState.emit(LoadingState.LOADING)
-//        TODO ("ISSUE #7: guest sign-in is not being set when username is null/empty.")
-        if (accountRepo.userDataFlow.single().username.isNullOrEmpty()) {
+        if (accountRepo.userDataFlow.first().username.isNullOrEmpty()) {
             accountRepo.setUserData(username)
         }
         loadingState.emit(LoadingState.LOADED)
