@@ -74,6 +74,7 @@ class LoginViewModel @Inject constructor(
 
     fun signInAsGuest(username: String) = viewModelScope.launch {
         loadingState.emit(LoadingState.LOADING)
+//        TODO ("ISSUE #7: guest sign-in is not being set when username is null/empty.")
         if (accountRepo.userDataFlow.single().username.isNullOrEmpty()) {
             accountRepo.setUserData(username)
         }
