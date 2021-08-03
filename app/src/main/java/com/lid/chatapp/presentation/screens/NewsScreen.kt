@@ -2,6 +2,7 @@ package com.lid.chatapp.presentation.screens
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -10,19 +11,21 @@ import com.lid.chatapp.data.model.Article
 import com.lid.chatapp.presentation.components.news_components.NewsArticleCard
 import com.lid.chatapp.viewmodels.NewsViewModel
 
+@ExperimentalMaterialApi
 @Composable
-fun NewsScreen(viewModel: NewsViewModel = hiltViewModel()) {
+fun NewsScreen(toDetails: (Int) -> Unit, viewModel: NewsViewModel = hiltViewModel()) {
 //    val articleList by remember { viewModel.newsList }
-    ArticleList(viewModel.newsList.value)
+    ArticleList(viewModel.newsList.value, toDetails)
 }
 
+@ExperimentalMaterialApi
 @Composable
-fun ArticleList(articleList: List<Article>) {
+fun ArticleList(articleList: List<Article>, toDetails: (Int) -> Unit) {
 
     LazyColumn {
         items(articleList) { article ->
             if (!article.urlToImage.isNullOrEmpty()) {
-                NewsArticleCard(article)
+                NewsArticleCard(article, { toDetails(it) })
             }
         }
     }

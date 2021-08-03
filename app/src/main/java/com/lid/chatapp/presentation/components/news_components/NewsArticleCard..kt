@@ -3,10 +3,7 @@ package com.lid.chatapp.presentation.components.news_components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.runtime.Composable
@@ -33,14 +30,20 @@ fun ImagePreview() {
     }
 }
 
+@ExperimentalMaterialApi
 @Composable
-fun NewsArticleCard(article: Article, modifier: Modifier = Modifier) {
+fun NewsArticleCard(
+    article: Article,
+    toDetails: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
     val painter = rememberImagePainter(article.urlToImage)
 
     Card(
         modifier = modifier.padding(12.dp),
         elevation = 4.dp,
-        shape = RoundedCornerShape(8.dp)
+        shape = RoundedCornerShape(8.dp),
+        onClick = { article.id?.let { toDetails(it) } }
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             Image(

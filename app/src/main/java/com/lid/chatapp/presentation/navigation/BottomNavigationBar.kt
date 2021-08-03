@@ -13,15 +13,14 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.google.accompanist.insets.navigationBarsHeight
 import com.google.accompanist.insets.navigationBarsPadding
-import com.google.accompanist.insets.navigationBarsWithImePadding
 
 @Composable
 fun BottomNavigationBar(navController: NavController) {
     val items = listOf(
-        NavigationItem.Account,
-        NavigationItem.BreakingNews,
-        NavigationItem.Chat,
-        NavigationItem.Bookmarked
+        NavScreen.Home.BottomNavItem.Account,
+        NavScreen.Home.BottomNavItem.BreakingNews,
+        NavScreen.Home.BottomNavItem.Chat,
+        NavScreen.Home.BottomNavItem.Bookmarked
     )
     BottomNavigation(
         modifier = Modifier.navigationBarsHeight(additional = 56.dp),
