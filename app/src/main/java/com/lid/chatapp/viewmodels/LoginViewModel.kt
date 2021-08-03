@@ -9,8 +9,10 @@ import com.lid.chatapp.util.LoadingState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.single
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import okhttp3.internal.wait
 import javax.inject.Inject
 
 @HiltViewModel
@@ -39,7 +41,7 @@ class LoginViewModel @Inject constructor(
         try {
             loadingState.emit(LoadingState.LOADING)
             Firebase.auth.signInWithEmailAndPassword(email, password).await()
-//            TODO("ISSUE #4: Store email in DataStore")
+            accountRepo.setUserData(Firebase.auth.currentUser!!.email!!)
             loadingState.emit(LoadingState.LOADED)
         } catch (e: Exception) {
             loadingState.emit(LoadingState.error(e.localizedMessage))
@@ -50,6 +52,8 @@ class LoginViewModel @Inject constructor(
         try {
             loadingState.emit(LoadingState.LOADING)
             Firebase.auth.createUserWithEmailAndPassword(email, password).await()
+            Firebase.auth.signInWithEmailAndPassword(email, password).await()
+            accountRepo.setUserData(Firebase.auth.currentUser!!.email!!).wait()
             loadingState.emit(LoadingState.LOADED)
 
         } catch (e: Exception) {
@@ -61,7 +65,7 @@ class LoginViewModel @Inject constructor(
         try {
             loadingState.emit(LoadingState.LOADING)
             Firebase.auth.signInWithCredential(credential).await()
-//            TODO("ISSUE #4: Store token in DataStore")
+            accountRepo.setUserData(Firebase.auth.currentUser!!.email!!)
             loadingState.emit(LoadingState.LOADED)
         } catch (e: Exception) {
             loadingState.emit(LoadingState.error(e.localizedMessage))
@@ -70,7 +74,9 @@ class LoginViewModel @Inject constructor(
 
     fun signInAsGuest(username: String) = viewModelScope.launch {
         loadingState.emit(LoadingState.LOADING)
-        accountRepo.setUserData(username)
+        if (accountRepo.userDataFlow.single().username.isNullOrEmpty()) {
+            accountRepo.setUserData(username)
+        }
         loadingState.emit(LoadingState.LOADED)
 
     }
