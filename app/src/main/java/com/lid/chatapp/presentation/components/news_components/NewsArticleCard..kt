@@ -73,6 +73,7 @@ fun ArticleOptions() {
             .padding(end = 12.dp, bottom = 8.dp),
         horizontalArrangement = Arrangement.End,
     ) {
+// TODO("ISSUE #8: Add Share IconButton that sends article to Chatroom")
         Icon(
             imageVector = Icons.Default.BookmarkBorder,
             contentDescription = null
