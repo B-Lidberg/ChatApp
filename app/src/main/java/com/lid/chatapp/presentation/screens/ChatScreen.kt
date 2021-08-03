@@ -39,7 +39,7 @@ fun ChatScreen(vm: ChatViewModel = hiltViewModel()) {
     val messageList by vm.allMessages.observeAsState()
     val username by vm.currentUsername.observeAsState(vm.currentUsername.value ?: "guest")
 
-
+// TODO("ISSUE #6: Bottom of MessageBox is hidden underneath keyboard")
 
     Column(
             modifier = Modifier.fillMaxSize(),
