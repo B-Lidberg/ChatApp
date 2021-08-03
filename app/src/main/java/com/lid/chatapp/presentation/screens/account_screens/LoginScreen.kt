@@ -62,6 +62,7 @@ fun LoginScreen(
                 displaySnackbar = {
                     scope.launch {
                         delay(750)
+//TODO("ISSUE #4: Remove delay timer & handle displaying snackbar after register/login event(s) finish")
                         scaffoldState.snackbarHostState.showSnackbar(
                             if (Firebase.auth.currentUser?.email != null) {
                                 "Welcome $it!"
