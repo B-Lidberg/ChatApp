@@ -3,6 +3,7 @@ package com.lid.chatapp
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.core.view.WindowCompat
 import com.google.accompanist.insets.ExperimentalAnimatedInsets
@@ -13,6 +14,7 @@ import kotlinx.coroutines.*
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
+    @ExperimentalMaterialApi
     @ExperimentalAnimatedInsets
     @ExperimentalComposeUiApi
     @DelicateCoroutinesApi

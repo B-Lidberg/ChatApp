@@ -14,6 +14,7 @@ import com.lid.chatapp.presentation.navigation.Navigation
 import com.lid.chatapp.presentation.navigation.BottomNavigationBar
 import com.lid.chatapp.presentation.ui.theme.ChatAppTheme
 
+@ExperimentalMaterialApi
 @ExperimentalAnimatedInsets
 @ExperimentalComposeUiApi
 @Composable
@@ -30,6 +31,7 @@ fun MainScreen() {
     }
 }
 
+@ExperimentalMaterialApi
 @ExperimentalAnimatedInsets
 @ExperimentalComposeUiApi
 @Composable
