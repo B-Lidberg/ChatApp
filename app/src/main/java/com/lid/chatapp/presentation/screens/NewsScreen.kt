@@ -13,19 +13,19 @@ import com.lid.chatapp.viewmodels.NewsViewModel
 
 @ExperimentalMaterialApi
 @Composable
-fun NewsScreen(toDetails: (Int) -> Unit, viewModel: NewsViewModel = hiltViewModel()) {
+fun NewsScreen(toDetails: (String) -> Unit, viewModel: NewsViewModel = hiltViewModel()) {
 //    val articleList by remember { viewModel.newsList }
     ArticleList(viewModel.newsList.value, toDetails)
 }
 
 @ExperimentalMaterialApi
 @Composable
-fun ArticleList(articleList: List<Article>, toDetails: (Int) -> Unit) {
+fun ArticleList(articleList: List<Article>, toDetails: (String) -> Unit) {
 
     LazyColumn {
         items(articleList) { article ->
             if (!article.urlToImage.isNullOrEmpty()) {
-                NewsArticleCard(article, { toDetails(it) })
+                NewsArticleCard(article, { toDetails(article.url) })
             }
         }
     }

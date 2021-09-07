@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ArticleDetailScreen(articleId: Int, toHomeScreen: () -> Boolean) {
+fun ArticleDetailScreen(articleUrl: String, toHomeScreen: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
 
         Text("Tadah!", style = MaterialTheme.typography.h3)

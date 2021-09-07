@@ -18,7 +18,7 @@ import com.google.accompanist.insets.navigationBarsPadding
 fun BottomNavigationBar(navController: NavController) {
     val items = listOf(
         NavScreen.Home.BottomNavItem.Account,
-        NavScreen.Home.BottomNavItem.BreakingNews,
+        NavScreen.Home.BottomNavItem.News,
         NavScreen.Home.BottomNavItem.Chat,
         NavScreen.Home.BottomNavItem.Bookmarked
     )

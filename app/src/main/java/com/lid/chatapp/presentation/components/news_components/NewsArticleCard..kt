@@ -34,7 +34,7 @@ fun ImagePreview() {
 @Composable
 fun NewsArticleCard(
     article: Article,
-    toDetails: (Int) -> Unit,
+    toDetails: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val painter = rememberImagePainter(article.urlToImage)
@@ -43,7 +43,7 @@ fun NewsArticleCard(
         modifier = modifier.padding(12.dp),
         elevation = 4.dp,
         shape = RoundedCornerShape(8.dp),
-        onClick = { article.id?.let { toDetails(it) } }
+        onClick = { toDetails(article.url) }
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             Image(

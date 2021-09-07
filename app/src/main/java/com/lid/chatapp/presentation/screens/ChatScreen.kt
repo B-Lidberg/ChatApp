@@ -137,10 +137,20 @@ fun PostMessageButton(sendMessage: () -> Unit, hideKeyboard: () -> Unit?) {
 @Composable
 fun ClearChatButton(clearChatHistory: () -> Unit) {
     OutlinedButton(
-        modifier = Modifier.fillMaxWidth().padding(top = 25.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 25.dp),
         onClick = { clearChatHistory() }
     ) {
         Text("Clear Chat History")
+    }
+}
+
+@Preview
+@Composable
+fun ChatScreenPreview() {
+    ClearChatButton {
+
     }
 }
 
