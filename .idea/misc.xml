@@ -10,6 +10,8 @@
         <entry key="..\:/code/Projects/ChatApp-Full/ChatApp/app/src/main/res/drawable/ic_baseline_announcement_24.xml" value="0.3630769230769231" />
         <entry key="..\:/code/Projects/ChatApp-Full/ChatApp/app/src/main/res/drawable/ic_baseline_chat_bubble_24.xml" value="0.3630769230769231" />
         <entry key="..\:/code/Projects/ChatApp-Full/ChatApp/app/src/main/res/layout/activity_main.xml" value="0.22" />
+        <entry key="..\:/code/Projects/ChatApp-Full/ChatApp/app/src/main/res/layout/fragment_breaking_news.xml" value="0.3333333333333333" />
+        <entry key="..\:/code/Projects/ChatApp-Full/ChatApp/app/src/main/res/layout/item_article_preview.xml" value="0.3435185185185185" />
         <entry key="..\:/code/Projects/ChatApp-Full/ChatApp/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.22" />
       </map>
     </option>

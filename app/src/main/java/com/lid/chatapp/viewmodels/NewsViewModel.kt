@@ -13,6 +13,7 @@ import com.lid.chatapp.util.Constants.TAG
 import com.lid.chatapp.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,30 +30,21 @@ class NewsViewModel @Inject constructor(
     var endReached = mutableStateOf(false)
 
     init {
-        loadArticlesPaginated()
+        getBreakingNews("us")
     }
 
-    private fun loadArticlesPaginated() {
-        viewModelScope.launch {
-            isLoading.value = true
-            val result = newsRepo.getBreakingNews("us", breakingNewsPage)
-            when (result) {
-                is Resource.Success -> {
-                    Log.d(TAG, "RESULT == SUCCESS: ${result.data}:")
-                    endReached.value = breakingNewsPage * PAGE_SIZE >= result.data!!.articles.count()
-                    val articleEntries = result.data.articles
-                    breakingNewsPage++
-                    loadError.value = ""
-                    isLoading.value = false
-                    newsList.value += articleEntries
-                }
-                is Resource.Error -> {
-                    Log.d(TAG, "RESULT == ERROR: ${result.data}:")
+    fun getBreakingNews(countryCode: String) = viewModelScope.launch {
+        breakingNews.postValue(Resource.Loading())
+        val response = newsRepo.getBreakingNews(countryCode, breakingNewsPage)
+        breakingNews.postValue(handleBreakingNewsResponse(response))
+    }
 
-                    loadError.value = result.message!!
-                    isLoading.value = false
-                }
+    private fun handleBreakingNewsResponse(response: Response<NewsResponse>): Resource<NewsResponse> {
+        if (response.isSuccessful) {
+            response.body()?.let { resultResponse ->
+                return Resource.Success(resultResponse)
             }
         }
+        return Resource.Error(response.message())
     }
 }
