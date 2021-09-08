@@ -38,6 +38,9 @@
         android:id="@+id/articleFragment"
         android:name="com.lid.chatapp.presentation.fragments.ArticleFragment"
         android:label="ArticleFragment" >
+        <argument
+            android:name="article"
+            app:argType="com.lid.chatapp.data.model.Article"/>
     </fragment>
 
 </navigation>

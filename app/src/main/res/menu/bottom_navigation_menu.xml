@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/accountFragment"
-        android:title="Account"
-        android:icon="@drawable/ic_account"/>
+    <item
+        android:id="@+id/accountFragment"
+        android:icon="@drawable/ic_account"
+        android:title="Account" />
 
     <item android:id="@+id/breakingNewsFragment"
         android:title="News"
@@ -16,4 +17,7 @@
     <item android:id="@+id/bookmarkedFragment"
         android:title="Bookmarked"
         android:icon="@drawable/ic_bookmarks"/>
+
+
 </menu>
+

@@ -15,5 +15,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         bottomNavigationView.setupWithNavController(newsNavHostFragment.findNavController())
+        bottomNavigationView.setBackgroundColor(getColor(R.color.design_default_color_primary_variant))
     }
 }
