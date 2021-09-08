@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/accountFragment"
+        android:title="Account"
+        android:icon="@drawable/ic_account"/>
+
+    <item android:id="@+id/breakingNewsFragment"
+        android:title="News"
+        android:icon="@drawable/ic_breaking_news"/>
+
+    <item android:id="@+id/chatFragment"
+        android:title="Chat"
+        android:icon="@drawable/ic_chat_bubble"/>
+
+    <item android:id="@+id/bookmarkedFragment"
+        android:title="Bookmarked"
+        android:icon="@drawable/ic_bookmarks"/>
+</menu>
